@@ -93,9 +93,9 @@
                                reason = "use `libc` from crates.io",
                                issue = "27783"))]
 
-#![cfg_attr(not(feature = "use_std"), no_std)]
-
-#[cfg(all(not(cross_platform_docs), feature = "use_std"))]
+// #![cfg_attr(not(feature = "use_std"), no_std)]
+//
+// #[cfg(all(not(cross_platform_docs), feature = "use_std"))]
 extern crate std as core;
 
 #[macro_use] mod macros;
@@ -109,17 +109,7 @@ cfg_if! {
         // convenience. Those can be found in the switch.rs file.
     } else {
 
-        // Use repr(u8) as LLVM expects `void*` to be the same as `i8*` to help enable
-        // more optimization opportunities around it recognizing things like
-        // malloc/free.
-        #[repr(u8)]
-        pub enum c_void {
-            // Two dummy variants so the #[repr] attribute can be used.
-            #[doc(hidden)]
-            __variant1,
-            #[doc(hidden)]
-            __variant2,
-        }
+        pub use std::os::raw::c_void;
 
         pub type int8_t = i8;
         pub type int16_t = i16;
